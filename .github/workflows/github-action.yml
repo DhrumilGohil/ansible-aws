@@ -61,7 +61,7 @@ jobs:
       # --------------------------------------------------
       - name: Ansible syntax check
         run: |
-          ansible-playbook ansible/site.yml --syntax-check
+          ansible-playbook playbook.yml --syntax-check
 
       # --------------------------------------------------
       # Dry-run on Pull Requests
