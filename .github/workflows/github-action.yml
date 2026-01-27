@@ -26,7 +26,7 @@ jobs:
 
       # --------------------------------------------------
       # Assume AWS IAM Role via OIDC (NO secrets)
-      # --------------------------------------------------
+      # -----------------------------------------------
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
