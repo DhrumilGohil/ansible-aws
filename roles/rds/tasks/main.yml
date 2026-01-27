@@ -5,7 +5,6 @@
     --region us-east-1
   register: secret_raw
   changed_when: false
-  no_log: true
 
 - name: Parse secret JSON
   set_fact:
