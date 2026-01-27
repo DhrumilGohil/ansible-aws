@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      AWS_REGION: ap-south-1
+      AWS_REGION: us-east-1
 
     steps:
       # --------------------------------------------------
@@ -30,8 +30,8 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::<ACCOUNT_ID>:role/github-ansible-deploy-role
-          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::193157015569:role/aws-github
+          aws-region: us-east-1
 
       # --------------------------------------------------
       # (Optional but recommended) Verify identity
