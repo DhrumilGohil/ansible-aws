@@ -1,9 +1,9 @@
 region: us-east-1
 
 private_subnet_cidr_1: "10.0.1.0/24"
-public_subnet_cidr: "10.0.3.0/24"
 private_subnet_cidr_2: "10.0.2.0/24"
-vpc_cidr: "10.0.0.0/16"
+# vpc_cidr: "10.0.0.0/16"
+vpc_id: "vpc-0c86ccd1c0d9dc864"
 
 s3_bucket: aws-glue-testing-macon-test
 db_port: 5432
