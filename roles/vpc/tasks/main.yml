@@ -4,7 +4,7 @@
     cidr: "{{ private_subnet_cidr_1 }}"
     region: "{{ region }}"
     az: "us-east-1a"
-    state: present
+    state: absent
   register: gluerdssubnetgroup1
 
 - name: Create private subnet2
@@ -13,5 +13,5 @@
     cidr: "{{ private_subnet_cidr_2 }}"
     region: "{{ region }}"
     az: "us-east-1b"
-    state: present
+    state: absent
   register: gluerdssubnetgroup2
