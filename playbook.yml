@@ -4,9 +4,8 @@
     - vars/main.yml
     - group_vars/all/secrets.yml
   roles:
-   # - vpc
-    # - security_group
-  #  - s3
-  #  - iam
+    - vpc
+    - security_group
+    - s3
     - rds
-  #  - glue
+    - glue
