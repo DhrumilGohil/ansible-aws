@@ -24,7 +24,6 @@ Resources:
   rRole:
     Type: AWS::IAM::Role
     Properties:
-		  RoleName: glue-etl-role
       Path: /project/
       PermissionsBoundary: !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/vaec/project-admin
       AssumeRolePolicyDocument:
@@ -38,6 +37,7 @@ Resources:
       ManagedPolicyArns:
         - !Ref rPolicy
         - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+			RoleName: glue-etl-role
 
 Outputs:
   GlueRoleArn:
