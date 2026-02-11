@@ -37,46 +37,46 @@ jobs:
       - name: Verify AWS identity
         run: aws sts get-caller-identity
 
-      # --------------------------------------------------
-      # Setup Python
-      # --------------------------------------------------
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
+      # # --------------------------------------------------
+      # # Setup Python
+      # # --------------------------------------------------
+      # - name: Set up Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: "3.13"
 
-      # --------------------------------------------------
-      # Install Ansible + AWS dependencies
-      # --------------------------------------------------
-      - name: Install Ansible and dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install ansible boto3 botocore
-          ansible-galaxy collection install amazon.aws
+      # # --------------------------------------------------
+      # # Install Ansible + AWS dependencies
+      # # --------------------------------------------------
+      # - name: Install Ansible and dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install ansible boto3 botocore
+      #     ansible-galaxy collection install amazon.aws
 
-      # --------------------------------------------------
-      # Ansible syntax check
-      # --------------------------------------------------
-      - name: Ansible syntax check
-        run: |
-          ansible-playbook playbook.yml --syntax-check
+      # # --------------------------------------------------
+      # # Ansible syntax check
+      # # --------------------------------------------------
+      # - name: Ansible syntax check
+      #   run: |
+      #     ansible-playbook playbook.yml --syntax-check
 
-      # --------------------------------------------------
-      # Dry-run on Pull Requests
-      # --------------------------------------------------
-      - name: Ansible dry-run (PR only)
-        if: github.event_name == 'pull_request'
-        run: |
-          ansible-playbook playbook.yml \
-            --check --diff
+      # # --------------------------------------------------
+      # # Dry-run on Pull Requests
+      # # --------------------------------------------------
+      # - name: Ansible dry-run (PR only)
+      #   if: github.event_name == 'pull_request'
+      #   run: |
+      #     ansible-playbook playbook.yml \
+      #       --check --diff
 
-      # --------------------------------------------------
-      # Deploy on merge to main
-      # --------------------------------------------------
-      - name: Ansible deploy (main branch)
-        if: github.event_name == 'push'
-        run: |
-          ansible-playbook playbook.yml -vv
+      # # --------------------------------------------------
+      # # Deploy on merge to main
+      # # --------------------------------------------------
+      # - name: Ansible deploy (main branch)
+      #   if: github.event_name == 'push'
+      #   run: |
+      #     ansible-playbook playbook.yml -vv
       
       # --------------------------------------------------
       # Deploy Cloudformation IAM glue template
