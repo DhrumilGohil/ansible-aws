@@ -37,7 +37,7 @@ Resources:
       ManagedPolicyArns:
         - !Ref rPolicy
         - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
-      RoleName: glue-etl-role
+      RoleName: glue-etl-role1
 
 Outputs:
   GlueRoleArn:
