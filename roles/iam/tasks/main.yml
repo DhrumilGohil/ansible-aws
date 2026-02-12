@@ -14,3 +14,53 @@
 #     policy_name: glue-inline-policy
 #     policy_json: "{{ lookup('file', 'glue-inline-policy.json') }}"
 #   register: glue_policy
+
+- name: Create Glue IAM Role with S3 Access
+  block:
+    - debug:
+        msg: "Creating Glue IAM Role with S3 Access"
+
+  tasks:
+    # Get AWS account ID dynamically
+    - name: Get AWS account information
+      amazon.aws.aws_caller_info:
+      register: caller_info
+
+    # Create Managed Policy
+    - name: Create Glue S3 managed policy
+      amazon.aws.iam_managed_policy:
+        policy_name: "{{ custom_policy_name }}"
+        state: present
+        path: /project/
+        policy:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: S3LimitedReadWriteAccess
+              Effect: Allow
+              Action:
+                - s3:ListBucket
+                - s3:GetObject*
+                - s3:PutObject
+                - s3:DeleteObject
+              Resource:
+                - "arn:aws:s3:::{{ bucket_name }}"
+                - "arn:aws:s3:::{{ bucket_name }}/*"
+      register: created_policy
+
+    # Create IAM Role
+    - name: Create Glue IAM role
+      amazon.aws.iam_role:
+        name: "{{ role_name }}"
+        state: present
+        path: /project/
+        assume_role_policy_document:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: glue.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        managed_policies:
+          - "{{ created_policy.policy.arn }}"
+          - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole

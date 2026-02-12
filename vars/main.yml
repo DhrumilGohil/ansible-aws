@@ -14,3 +14,7 @@ secret_name: prod/glue-rds-secret
 glue_role_name: glue-etl-role
 glue_job_name: csv-to-rds-job
 glue_connection_name: postgres-connection
+
+ 
+boundary_policy_name: vaec/project-admin
+custom_policy_name: glue-s3-policy
