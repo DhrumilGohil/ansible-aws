@@ -50,7 +50,7 @@
     # Create IAM Role
     - name: Create Glue IAM role
       amazon.aws.iam_role:
-        name: "{{ role_name }}"
+        name: "{{ glue_role_name }}"
         state: present
         path: /project/
         assume_role_policy_document:
