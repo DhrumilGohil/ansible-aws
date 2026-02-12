@@ -38,5 +38,5 @@
     vpc_security_group_ids:
       - "{{ rds_sg.group_id }}"
     publicly_accessible: false
-    state: absent
+    state: present
   register: rds

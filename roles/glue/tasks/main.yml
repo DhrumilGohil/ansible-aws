@@ -16,7 +16,7 @@
     subnet_id: "{{ gluerdssubnetgroup1.subnet.id }}"
     security_groups:
       - "{{ glue_sg.group_id }}"
-    state: absent
+    state: present
 
 - name: Create Glue Job
   community.aws.glue_job:
@@ -31,4 +31,4 @@
       "--TempDir": "s3://{{ s3_bucket }}/temp/"
       "--additional-python-modules": "openpyxl"
     command_script_location: "s3://{{ s3_bucket }}/scripts/s3_csv_to_rds.py"
-    state: absent
+    state: present
