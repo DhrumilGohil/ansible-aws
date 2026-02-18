@@ -12,7 +12,7 @@ jobs:
 
    steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 			
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -20,9 +20,8 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-east-1
 
-
       - name: Log in to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build Docker image
         run: |
@@ -35,5 +34,5 @@ jobs:
 
       - name: Push Docker image to ECR
         run: |
-         docker push 193157015569.dkr.ecr.<region>.amazonaws.com/accumulator:${{ github.sha }}
+         docker push 193157015569.dkr.ecr.us-east-1.amazonaws.com/accumulator:${{ github.sha }}
          docker push 193157015569.dkr.ecr.us-east-1.amazonaws.com/accumulator:latest
