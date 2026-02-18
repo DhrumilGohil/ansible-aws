@@ -1,0 +1,39 @@
+name: Build and Push to AWS ECR
+
+on:
+  push:
+   paths:
+    - 'Dockerfile'
+    - 'app/app.py'
+
+jobs:
+  build:
+   runs-on: ubuntu-latest
+
+   steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+			
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker image
+        run: |
+          docker build -t accumulator:${{ github.sha }} .
+
+      - name: Tag Docker image
+        run: |
+         docker tag accumulator:${{ github.sha }} 193157015569.dkr.ecr.us-east-1.amazonaws.com/accumulator:${{ github.sha }}
+         docker tag accumulator:${{ github.sha }} 193157015569.dkr.ecr.us-east-1.amazonaws.com/accumulator:latest
+
+      - name: Push Docker image to ECR
+        run: |
+         docker push 193157015569.dkr.ecr.<region>.amazonaws.com/accumulator:${{ github.sha }}
+         docker push 193157015569.dkr.ecr.us-east-1.amazonaws.com/accumulator:latest

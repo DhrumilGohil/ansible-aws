@@ -1,7 +1,11 @@
 region: us-east-1
 
-private_subnet_cidr_1: "10.0.1.0/24"
-private_subnet_cidr_2: "10.0.2.0/24"
+private_subnet_1: "10.0.1.0/24"
+private_subnet_2: "10.0.2.0/24"
+
+public_subnet_1: "10.0.3.0/24"
+public_subnet_2: "10.0.4.0/24"
+
 # vpc_cidr: "10.0.0.0/16"
 vpc_id: "vpc-0c86ccd1c0d9dc864"
 
@@ -18,3 +22,11 @@ glue_connection_name: postgres-connection
  
 boundary_policy_name: vaec/project-admin
 custom_policy_name: glue-s3-policy
+
+
+ecs_cluster_name: my-ecs-cluster
+ecs_service_name: my-ecs-service
+
+container_image: 193157015569.dkr.ecr.us-east-1.amazonaws.com/accumulator:latest
+container_port: 3000
+
