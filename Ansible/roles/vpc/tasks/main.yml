@@ -1,0 +1,57 @@
+- name: Create private subnet1
+  amazon.aws.ec2_vpc_subnet:
+    vpc_id: "{{ vpc_id }}"
+    cidr: "{{ private_subnet_1 }}"
+    region: "{{ region }}"
+    az: "us-east-1a"
+    state: present
+  register: privaterdssubnetgroup1
+
+- name: Create private subnet2
+  amazon.aws.ec2_vpc_subnet:
+    vpc_id: "{{ vpc_id }}"
+    cidr: "{{ private_subnet_2 }}"
+    region: "{{ region }}"
+    az: "us-east-1b"
+    state: present
+  register: privaterdssubnetgroup2
+
+- name: Create public subnet1
+  amazon.aws.ec2_vpc_subnet:
+    vpc_id: "{{ vpc_id }}"
+    cidr: "{{ public_subnet_1 }}"
+    region: "{{ region }}"
+    az: "us-east-1a"
+    state: present
+  register: pub_subnet1
+
+
+- name: Create public subnet2
+  amazon.aws.ec2_vpc_subnet:
+    vpc_id: "{{ vpc_id }}"
+    cidr: "{{ public_subnet_2 }}"
+    region: "{{ region }}"
+    az: "us-east-1b"
+    state: present
+  register: pub_subnet2
+
+
+- name: Create Internet Gateway
+  amazon.aws.ec2_vpc_igw:
+    vpc_id: "{{ vpc_id }}"
+    region: us-east-1
+    state: present
+  register: igw
+
+
+- name: Create Public Route Table
+  amazon.aws.ec2_vpc_route_table:
+    vpc_id: "{{ vpc_id }}"
+    region: us-east-1
+    subnets:
+      - "{{ pub_subnet1.subnet.id }}"
+      - "{{ pub_subnet2.subnet.id }}"
+    routes:
+      - dest: 0.0.0.0/0
+        gateway_id: "{{ igw.gateway_id }}"
+  register: public_rt

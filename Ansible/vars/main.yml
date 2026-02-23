@@ -1,0 +1,25 @@
+region: us-east-1
+
+private_subnet_1: "10.0.1.0/24"
+private_subnet_2: "10.0.2.0/24"
+
+public_subnet_1: "10.0.3.0/24"
+public_subnet_2: "10.0.4.0/24"
+
+# vpc_cidr: "10.0.0.0/16"
+vpc_id: "vpc-0c86ccd1c0d9dc864"
+
+s3_bucket: aws-glue-testing-macon-test
+db_port: 5432
+db_instance_class: db.t3.medium
+
+secret_name: prod/glue-rds-secret
+
+ecs_cluster_name: accumulator-cluster
+ecs_service_name: accumulator-ecs-service
+task_family: accumulator-api-task-test
+
+container_name: accumulator-api-container
+container_image: 193157015569.dkr.ecr.us-east-1.amazonaws.com/accumulator:latest
+container_port: 3000
+

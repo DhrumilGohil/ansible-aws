@@ -1,0 +1,36 @@
+
+# ---------------- Target Group ----------------
+
+  - name: Create Target Group
+    community.aws.elb_target_group:
+      name: accumulator-ecs-tg
+      protocol: HTTP
+      port: "{{ container_port }}"
+      vpc_id: "{{ vpc_id }}"
+      target_type: ip
+      health_check_path: /
+      health_check_protocol: HTTP
+      state: present
+      region: "{{ region }}"
+    register: tg
+# ---------------- ALB ----------------
+
+  - name: Create Application Load Balancer
+    amazon.aws.elb_application_lb:
+      name: accumulator
+      subnets: 
+        - "{{ pub_subnet1.subnet.id }}"
+        - "{{ pub_subnet2.subnet.id }}"
+      security_groups:
+        - "{{ alb_sg.group_id }}"
+      scheme: internet-facing
+      state: present
+      region: "{{ region }}"
+      listeners:
+      - Protocol: HTTP
+        Port: 3000
+        DefaultActions:
+          - Type: forward
+            TargetGroupArn: "{{ tg.target_group_arn }}"
+    register: alb
+

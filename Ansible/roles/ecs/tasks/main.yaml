@@ -1,0 +1,78 @@
+ # ---------------- ECS Cluster ----------------
+
+  - name: Create ECS Cluster
+    community.aws.ecs_cluster:
+      name: "{{ ecs_cluster_name }}"
+      state: present
+      region: "{{ region }}"
+
+  # ---------------- Task Definition ----------------
+
+  - name: Register ECS Task Definition
+    community.aws.ecs_taskdefinition:
+      family: "{{ task_family }}"
+      network_mode: awsvpc
+      launch_type: FARGATE 
+      cpu: 256
+      memory: 512
+      execution_role_arn: "{{ ecs_execution_role.iam_role.arn }}"
+      containers:
+        - name: "{{ container_name }}"
+          image: "{{ container_image }}"
+          essential: true
+
+          portMappings:
+            - containerPort: "{{ container_port }}"
+              protocol: tcp
+
+          environment:
+
+            - name: DB_HOST
+              value: "{{ db_secret.host }}"
+
+            - name: DB_NAME
+              value: "{{ db_secret.dbname }}"
+
+            - name: DB_USER
+              value: "{{ db_secret.username }}"
+
+            - name: DB_PASS
+              value: "{{ db_secret.password }}"
+
+            - name: ENV
+              value: production
+
+      state: absent
+      region: "{{ region }}"
+    register: taskdef
+
+
+ # ---------------- ECS Service (Fargate) ----------------
+
+  - name: Create ECS Fargate Service
+    community.aws.ecs_service:
+      name: "{{ ecs_service_name }}"
+      cluster: "{{ ecs_cluster_name }}"
+      task_definition: "{{ taskdef.taskdefinition.taskDefinitionArn }}"
+      launch_type: FARGATE
+      desired_count: 1
+
+      network_configuration:
+        subnets: "{{ privaterdssubnetgroup1.subnet.id }}"
+        security_groups:
+          - "{{ ecs_sg.group_id }}"
+        assign_public_ip: yes
+
+      load_balancers:
+        - targetGroupArn: "{{ tg.target_group_arn }}"
+          containerName: "{{ container_name }}"
+          containerPort: "{{ container_port }}"
+
+      state: present
+      region: "{{ region }}"
+
+ # ---------------- Create ECR -----------------
+
+  - name: ecr-repo
+    community.aws.ecs_ecr:
+      name: accumulator

@@ -1,0 +1,35 @@
+- name: Create ALB security group
+  amazon.aws.ec2_security_group:
+    name: alb-sg
+    description: ALB SG
+    vpc_id: "{{ vpc_id }}"
+    rules:
+      - proto: tcp
+        ports: [3000]
+        cidr_ip: 0.0.0.0/0
+    region: "{{ region }}"
+  register: alb_sg
+
+- name: Create ECS security group
+  amazon.aws.ec2_security_group:
+    name: ecs-sg
+    description: ECS SG
+    vpc_id:  "{{ vpc_id }}"
+    rules:
+      - proto: tcp
+        ports: [3000]
+        group_id: "{{ alb_sg.group_id }}"
+    region: "{{ region }}"
+  register: ecs_sg
+
+- name: Create RDS security group
+  amazon.aws.ec2_security_group:
+    name: rds-sg
+    description: RDS SG
+    vpc_id: "{{ vpc_id }}"
+    rules:
+      - proto: tcp
+        ports: [5432]
+        group_id: "{{ ecs_sg.group_id }}"
+    region: "{{ region }}"
+  register: rds_sg
